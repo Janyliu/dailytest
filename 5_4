@@ -1,0 +1,72 @@
+import urllib2
+import time
+import string
+
+def get_starttime(start_time):
+  m_second=string.atof(start_time)
+  second=m_second/1000
+  start_time=time.strftime(‘%Y-%m-%d %H:%M:%S’,time.localtime(second))
+  return start_time
+
+def get_maxtime(dict_user):
+users_maxtime=[]
+for user,list_time in dict_user.items()
+     users_maxtime.append(sorted(list_time,key=lambda x:x[1])[0],reverse=True)
+  handler_maxtime= sorted(users_maxtime,key= lambda x:x[1])[0],reverse=True)
+
+def get_dict(list_content):
+  dict_method={}
+  for dict_single_access in list_content:
+     method_name=dict_single_access[‘method’]
+     handler_name=dict_single_access[‘handler’]
+     user_name=dict_single_access[‘login_email’]
+     start_time= get_starttime(dict_single_access[‘start_time’])
+     request_time= dict_single_access[‘request_time’]
+     list_time=(start_time,request_time)
+     dict_method[method_name]=dict_method.get(method_name),{})
+dict_method[method_name][handler_name]=dict_method[method_name].get(handler_name,{})
+dict_method[method_name][handler_name][user_name]=dict_method[method_name][handler_name].get(user_name),[])
+dict_method[method_name][handler_name][user_name].append(list_time)
+  return dict_method
+
+def get_dict_user_number(dict_user):
+  user_number={}
+  for user,list_time in dict_user:
+     user_number[user]=len(list_time)
+  return user_number
+
+def get_top_handler(dict_handler_time,top_number):
+  sorted_handler = sorted(dict_handler_time.iteritems(),key=lambda d: string.atof(d[1][0]), reverse = True)
+  handler_top=sorted_handler[0:top_number]
+  return handler_top
+
+def get_top_user(dict_user_number,top_number):
+  sorted_user_number=sorted(dict_user_number.iteritems(),key=lambda x:x[1],reverse=True)
+  user_top=sorted_user_number[0:top_number]
+  return user_top
+
+def solution(dict_method_handler_user):
+  for method,dict_handler_user in dict_method_handler_user.items():
+print '%s方法下响应时间最长前十的接口及其开始时间、响应时间为：' %method
+dict_handler_time={}
+dict_handler_user_number={}
+    for handler,dict_user in dict_handler_user.items():
+       dict_handler_time[handler]=get_maxtime(dict_user)
+       dict_handler_user_number[handler]=get_dict_user_number(dict_user)
+    handler_top=get_top_handler(dict_handler_time,top_handler_number)
+    for top_handler in handler_top:
+       print top_handler 
+       print ‘%s接口下访问量前三的用户及其次数为: ‘%top_handler[0]
+       top_user =get_top_user(dict_handler_user_number[top_handler],top_user_number)
+       for user in top_user:
+          print ‘    ‘,user
+
+
+url=’http://log.tan14.cn/mongo/apilogs.json’
+web_page=urllib2.urlopen(url)
+content=web_page.read()
+list_content=eval(content)
+top_handler_number=10
+top_user_number=3
+dict_method_handler_user=get_dict(list_content)
+solution(dict_method_handler_user)
